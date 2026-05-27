@@ -9,18 +9,18 @@ const restartBtn = document.getElementById('restart-btn');
 let score = 0;
 let gameActive = true;
 let enemies = [];
-let pinhoes = []; // Array para os pinhões que caem no chão
+let pinhoes = []; 
 let spawnTimer = 0;
-let baseSpeed = 3; // Velocidade inicial dos lobos
+let baseSpeed = 3; 
 
-// Nosso herói: Gralha-Azul (Ajustado para as cores corretas)
+// CONFIGURAÇÃO DA GRALHA-AZUL (Sem nenhum traço de rosa)
 const player = {
     x: canvas.width / 2 - 20,
     y: canvas.height - 110,
     width: 40,
     height: 60,
-    color: '#00457c', // Azul escuro característico da Gralha-Azul
-    headColor: '#111111', // Cabeça preta
+    color: '#00457c',     // Corpo Azul Escuro
+    headColor: '#111111', // Cabeça Preta
     state: 'idle',
     hp: 100,
     maxHp: 100,
@@ -52,8 +52,7 @@ restartBtn.addEventListener('click', resetGame);
 function spawnEnemy() {
     const side = Math.random() > 0.5 ? 'left' : 'right';
     
-    // PROGRESSÃO DE VELOCIDADE: A cada ponto ganho, os lobos ficam um pouco mais rápidos.
-    // O Math.min garante um teto para o jogo não ficar fisicamente impossível de jogar.
+    // PROGRESSÃO DE DIFICULDADE (Lobos andam mais rápido conforme os pontos sobem)
     const difficultyBonus = Math.min(score * 0.15, 8); 
     const currentSpeed = baseSpeed + difficultyBonus + Math.random() * 1.5;
 
@@ -80,13 +79,13 @@ function checkHit(direction) {
 }
 
 function defeatEnemy(enemy, index) {
-    // Quando o lobo é derrotado, ele dropa um pinhão!
+    // Drop de pinhão
     pinhoes.push({
         x: enemy.x + 15,
         y: enemy.y + 10,
         width: 15,
         height: 22,
-        vSpeed: -5, // Efeito de pulinho ao dropar
+        vSpeed: -5, 
         hSpeed: enemy.speed * -0.3
     });
     
@@ -110,18 +109,17 @@ function update() {
         if (player.actionTimer <= 0) player.state = 'idle';
     }
 
-    // Gerador de Inimigos (Eles nascem mais rápido conforme você pontua)
+    // Tempo de spawn reduz conforme os pontos aumentam
     spawnTimer++;
     const spawnInterval = Math.max(50 - Math.floor(score * 0.5), 18); 
     if (spawnTimer % spawnInterval === 0) {
         spawnEnemy();
     }
 
-    // Atualizar Inimigos
+    // Inimigos
     enemies.forEach((enemy, index) => {
         enemy.x += enemy.speed;
 
-        // Colisão com jogador
         if (
             enemy.x < player.x + player.width &&
             enemy.x + enemy.width > player.x &&
@@ -140,7 +138,7 @@ function update() {
         }
     });
 
-    // Física e Coleta dos Pinhões
+    // Pinhões
     pinhoes.forEach((pinhao, index) => {
         pinhao.x += pinhao.hSpeed;
         pinhao.y += pinhao.vSpeed;
@@ -153,7 +151,6 @@ function update() {
             pinhao.vSpeed = 0;
         }
 
-        // Ímã de coleta automática se a Gralha chegar perto
         let distToPlayer = Math.abs((player.x + player.width/2) - pinhao.x);
         if (distToPlayer < 65 && Math.abs(player.y - pinhao.y) < 85) {
             pinhoes.splice(index, 1);
@@ -164,10 +161,10 @@ function update() {
 }
 
 function drawAraucaria(x, y, scale) {
-    ctx.fillStyle = '#4a2f13'; // Tronco
+    ctx.fillStyle = '#4a2f13'; 
     ctx.fillRect(x, y, 20 * scale, 120 * scale);
     
-    ctx.fillStyle = '#1e4620'; // Copas estilo Araucária paranaense
+    ctx.fillStyle = '#1e4620'; 
     ctx.fillRect(x - 40 * scale, y, 100 * scale, 15 * scale);
     ctx.fillRect(x - 50 * scale, y - 25 * scale, 120 * scale, 15 * scale);
     ctx.fillRect(x - 30 * scale, y - 50 * scale, 80 * scale, 15 * scale);
@@ -176,25 +173,25 @@ function drawAraucaria(x, y, scale) {
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Desenhar Araucárias ao Fundo
+    // Fundo
     drawAraucaria(80, 150, 0.8);
     drawAraucaria(680, 130, 0.9);
 
-    // Chão florestal
+    // Chão
     ctx.fillStyle = '#8d6e63'; 
     ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
     ctx.fillStyle = '#5d4037'; 
     ctx.fillRect(0, canvas.height - 15, canvas.width, 15);
 
-    // Desenhar Inimigos
+    // Lobos
     enemies.forEach(enemy => {
         ctx.fillStyle = enemy.color;
         ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
     });
 
-    // Desenhar Pinhões
+    // Pinhões
     pinhoes.forEach(pinhao => {
-        ctx.fillStyle = '#d35400'; // Cor pinhão
+        ctx.fillStyle = '#d35400'; 
         ctx.beginPath();
         ctx.ellipse(pinhao.x, pinhao.y, pinhao.width/2, pinhao.height/2, 0, 0, Math.PI * 2);
         ctx.fill();
@@ -202,23 +199,21 @@ function draw() {
         ctx.fillRect(pinhao.x - 2, pinhao.y - pinhao.height/2, 4, 4);
     });
 
-    // Desenhar Gralha-Azul (Corrigido para Azul Escuro)
-    ctx.fillStyle = player.color;
+    // DESENHO DA GRALHA-AZUL (Cores forçadas e corrigidas)
+    ctx.fillStyle = player.color; // Azul Escuro
     ctx.fillRect(player.x, player.y, player.width, player.height);
     
-    // Cabeça Preta
-    ctx.fillStyle = player.headColor;
+    ctx.fillStyle = player.headColor; // Cabeça Preta
     ctx.fillRect(player.x, player.y, player.width, 22);
     
-    // Bico Laranja/Amarelo
-    ctx.fillStyle = '#f1c40f';
+    ctx.fillStyle = '#f1c40f'; // Bico Amarelo
     if (player.state === 'punch_left') {
         ctx.fillRect(player.x - 15, player.y + 6, 15, 10);
     } else {
         ctx.fillRect(player.x + player.width, player.y + 6, 15, 10);
     }
 
-    // Asas/Ataques em um tom azul um pouco mais claro para destacar
+    // Asas (Ataques) - Azul um pouco mais claro
     ctx.fillStyle = '#0069bd';
     if (player.state === 'punch_left') {
         ctx.fillRect(player.x - 25, player.y + 22, 25, 15);

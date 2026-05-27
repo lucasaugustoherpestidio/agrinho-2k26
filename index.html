@@ -1,30 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iron Snout Clone</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-    <div id="game-container">
-        <div id="ui-layer">
-            <div id="score-board">Pontos: <span id="score">0</span></div>
-            <div id="hp-bar-container">
-                <div id="hp-bar"></div>
-            </div>
+<div id="ui-layer">
+    <div id="score-board">🌲 Pinhões Salvos: <span id="score">0</span></div>
+    <!-- Bloco da Vida Atualizado com o Nome embaixo -->
+    <div id="hp-container" style="display: flex; flex-direction: column; align-items: flex-end;">
+        <div id="hp-bar-container">
+            <div id="hp-bar"></div>
         </div>
-        
-        <canvas id="gameCanvas" width="800" height="400"></canvas>
-        
-        <div id="game-over-screen" class="hidden">
-            <h1>Game Over</h1>
-            <p>Os lobos te pegaram!</p>
-            <button id="restart-btn">Jogar Novamente</button>
-        </div>
+        <span id="player-name" style="color: #00457c; font-weight: bold; font-size: 14px; margin-top: 5px; text-shadow: 1px 1px 0px #fff;">Gralha-Azul</span>
     </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+</div>
