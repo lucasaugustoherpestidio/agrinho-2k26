@@ -1,1 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron Snout Clone</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+    <div id="game-container">
+        <div id="ui-layer">
+            <div id="score-board">Pontos: <span id="score">0</span></div>
+            <div id="hp-bar-container">
+                <div id="hp-bar"></div>
+            </div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        
+        <div id="game-over-screen" class="hidden">
+            <h1>Game Over</h1>
+            <p>Os lobos te pegaram!</p>
+            <button id="restart-btn">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
